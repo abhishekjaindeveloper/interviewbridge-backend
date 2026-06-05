@@ -122,6 +122,8 @@ public class EntityConstants {
         public static final String IDX_SESSION_TECH_ID = "idx_ib_practice_session_technology_id";
         public static final String IDX_SESSION_EXP_ID = "idx_ib_practice_session_experience_id";
 
+        public static final int MIN_TOTAL_QUESTIONS = 1;
+        public static final int MAX_TOTAL_QUESTIONS = 20;
         public static final int DEFAULT_TOTAL_QUESTIONS = 10;
         public static final String MSG_TOTAL_QUESTIONS_MIN = "Total questions must be at least 1";
         public static final String MSG_TOTAL_QUESTIONS_MAX = "Total questions must not exceed 20";

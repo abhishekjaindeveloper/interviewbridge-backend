@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
 
 import java.security.Key;
 import java.util.Date;
@@ -27,6 +28,24 @@ public class JwtService {
 
     @Value(SecurityConstants.JWT_EXPIRATION_PROP)
     private long jwtExpiration;
+
+    /**
+     * Validates that the configured JWT secret meets minimum requirements.
+     */
+    @PostConstruct
+    public void validateSecretKey() {
+        if (secretKey == null || secretKey.trim().isEmpty()) {
+            throw new IllegalStateException(SecurityConstants.MSG_JWT_SECRET_REQUIRED);
+        }
+        try {
+            byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+            if (keyBytes.length < 32) {
+                throw new IllegalStateException(SecurityConstants.MSG_JWT_SECRET_INSUFFICIENT_LENGTH);
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException(SecurityConstants.MSG_JWT_SECRET_INVALID_BASE64, e);
+        }
+    }
 
     /**
      * Extracts the username (subject) from the token.

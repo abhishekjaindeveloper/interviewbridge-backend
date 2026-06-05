@@ -17,7 +17,7 @@ public record StartPracticeSessionRequest(
     @NotNull(message = EntityConstants.User.MSG_EXP_ID_REQUIRED)
     UUID experienceId,
 
-    @Min(value = 1, message = EntityConstants.PracticeSession.MSG_TOTAL_QUESTIONS_MIN)
-    @Max(value = 20, message = EntityConstants.PracticeSession.MSG_TOTAL_QUESTIONS_MAX)
+    @Min(value = EntityConstants.PracticeSession.MIN_TOTAL_QUESTIONS, message = EntityConstants.PracticeSession.MSG_TOTAL_QUESTIONS_MIN)
+    @Max(value = EntityConstants.PracticeSession.MAX_TOTAL_QUESTIONS, message = EntityConstants.PracticeSession.MSG_TOTAL_QUESTIONS_MAX)
     Integer totalQuestions
 ) {}

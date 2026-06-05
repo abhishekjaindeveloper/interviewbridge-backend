@@ -42,8 +42,10 @@ public final class SecurityConstants {
     public static final String USER_OR_ADMIN_ACCESS = "hasAnyRole('" + ROLE_USER_NAME + "', '" + ROLE_ADMIN_NAME + "')";
     
     // Config properties keys (for @Value or logging)
-    public static final String JWT_SECRET_PROP = "${app.jwt.secret}";
+    public static final String JWT_SECRET_PROP = SecurityConstants.JWT_SECRET_RAW_PROP;
+    private static final String JWT_SECRET_RAW_PROP = "${app.jwt.secret}";
     public static final String JWT_EXPIRATION_PROP = "${app.jwt.expiration-ms}";
+    public static final String CORS_ALLOWED_ORIGINS_PROP = "${app.cors.allowed-origins:http://localhost:3000,http://localhost:8080,http://localhost:5000,http://localhost:9000}";
 
     // Error Messages
     public static final String MSG_UNAUTHORIZED = "Unauthorized access";
@@ -153,4 +155,9 @@ public final class SecurityConstants {
     // Remediation business validation messages
     public static final String MSG_QUESTIONS_GENERATED_CREATED_ONLY = "Questions can only be generated for sessions in CREATED status.";
     public static final String MSG_AI_EVALUATION_FAILED = "AI evaluation service processing failed: ";
+
+    // JWT Secret Validation Messages
+    public static final String MSG_JWT_SECRET_REQUIRED = "JWT secret key must not be null or empty.";
+    public static final String MSG_JWT_SECRET_INSUFFICIENT_LENGTH = "JWT secret key must be at least 256 bits (32 bytes) long when decoded from Base64 for HS256 algorithm.";
+    public static final String MSG_JWT_SECRET_INVALID_BASE64 = "JWT secret key is not a valid Base64 encoded string.";
 }
