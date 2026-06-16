@@ -12,6 +12,7 @@ public record AdminUserResponse(
     UUID id,
     String name,
     String email,
+    String phoneNumber,
     Role role,
     ApprovalStatus approvalStatus,
     TechnologyResponse technology,

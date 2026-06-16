@@ -27,18 +27,24 @@ public class EntityConstants {
         public static final String COL_ID = "id";
         public static final String COL_NAME = "name";
         public static final String COL_EMAIL = "email";
+        public static final String COL_PHONE_NUMBER = "phone_number";
+        public static final String COL_TERMS_ACCEPTED = "terms_accepted";
+        public static final String COL_TERMS_ACCEPTED_AT = "terms_accepted_at";
         public static final String COL_PASSWORD = "password";
         public static final String COL_ROLE = "role";
         public static final String COL_APPROVAL_STATUS = "approval_status";
 
         public static final String UQ_EMAIL = "uq_ib_user_email";
+        public static final String UQ_PHONE_NUMBER = "uq_ib_user_phone_number";
         public static final String IDX_EMAIL = "idx_ib_user_email";
+        public static final String IDX_PHONE_NUMBER = "idx_ib_user_phone_number";
         public static final String IDX_TECHNOLOGY_ID = "idx_ib_user_technology_id";
         public static final String IDX_EXPERIENCE_ID = "idx_ib_user_experience_id";
 
         // Field Length Limits
         public static final int NAME_MAX_LENGTH = 100;
         public static final int EMAIL_MAX_LENGTH = 255;
+        public static final int PHONE_NUMBER_MAX_LENGTH = 20;
         public static final int PASSWORD_MIN_LENGTH = 8;
         public static final int PASSWORD_MAX_LENGTH = 255;
 
@@ -48,10 +54,14 @@ public class EntityConstants {
         public static final String MSG_EMAIL_BLANK = "Email cannot be blank";
         public static final String MSG_EMAIL_INVALID = "Email must be a valid email address";
         public static final String MSG_EMAIL_SIZE = "Email must not exceed 255 characters";
+        public static final String MSG_PHONE_NUMBER_SIZE = "Phone number must not exceed 20 characters";
+        public static final String MSG_PHONE_NUMBER_BLANK = "Phone number cannot be blank";
+        public static final String MSG_PHONE_NUMBER_INVALID = "Phone number must be a valid mobile format";
         public static final String MSG_PASSWORD_BLANK = "Password cannot be blank";
         public static final String MSG_PASSWORD_SIZE = "Password must be between 8 and 255 characters";
         public static final String MSG_ROLE_REQUIRED = "Role is required";
         public static final String MSG_APPROVAL_STATUS_REQUIRED = "Approval status is required";
+        public static final String MSG_IDENTIFIER_BLANK = "Email or Phone Number cannot be blank";
 
         public static final String COL_TECHNOLOGY_ID = "technology_id";
         public static final String COL_EXPERIENCE_ID = "experience_id";

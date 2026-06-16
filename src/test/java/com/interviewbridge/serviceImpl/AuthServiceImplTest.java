@@ -62,7 +62,7 @@ class AuthServiceImplTest {
 
     @Test
     void register_Success() {
-        RegisterRequest request = new RegisterRequest("Test User", email, "password123");
+        RegisterRequest request = new RegisterRequest("Test User", email, "9876543210", true, "password123");
         when(userRepository.existsByEmail(email.toLowerCase())).thenReturn(false);
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
         
@@ -88,9 +88,50 @@ class AuthServiceImplTest {
     }
 
     @Test
+    void register_WithPhoneNumber_Success() {
+        String phone = "9174686803";
+        RegisterRequest request = new RegisterRequest("Test User", email, phone, true, "password123");
+        when(userRepository.existsByEmail(email.toLowerCase())).thenReturn(false);
+        when(userRepository.existsByPhoneNumber(phone)).thenReturn(false);
+        when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
+        
+        User pendingUser = User.builder()
+                .id(UUID.randomUUID())
+                .name("Test User")
+                .email(email)
+                .phoneNumber(phone)
+                .role(Role.ROLE_USER)
+                .approvalStatus(ApprovalStatus.PENDING)
+                .isActive(true)
+                .build();
+        when(userRepository.save(any(User.class))).thenReturn(pendingUser);
+
+        AuthResponse response = authService.register(request);
+
+        assertNotNull(response);
+        assertEquals(email, response.email());
+        assertEquals("Test User", response.name());
+        assertEquals(Role.ROLE_USER, response.role());
+        assertEquals(ApprovalStatus.PENDING, response.approvalStatus());
+        assertNull(response.token());
+        verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
     void register_DuplicateEmail_ThrowsException() {
-        RegisterRequest request = new RegisterRequest("Test User", email, "password123");
+        RegisterRequest request = new RegisterRequest("Test User", email, "9876543210", true, "password123");
         when(userRepository.existsByEmail(email.toLowerCase())).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class, () -> authService.register(request));
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void register_DuplicatePhoneNumber_ThrowsException() {
+        String phone = "9174686803";
+        RegisterRequest request = new RegisterRequest("Test User", email, phone, true, "password123");
+        when(userRepository.existsByEmail(email.toLowerCase())).thenReturn(false);
+        when(userRepository.existsByPhoneNumber(phone)).thenReturn(true);
 
         assertThrows(DuplicateResourceException.class, () -> authService.register(request));
         verify(userRepository, never()).save(any(User.class));
@@ -114,9 +155,37 @@ class AuthServiceImplTest {
     }
 
     @Test
+    void login_PhoneSuccess() {
+        String phone = "9174686803";
+        mockUser.setPhoneNumber(phone);
+        LoginRequest request = new LoginRequest(phone, "password123");
+        when(userRepository.findByPhoneNumber(phone)).thenReturn(Optional.of(mockUser));
+        when(passwordEncoder.matches("password123", "encodedPassword")).thenReturn(true);
+        when(jwtService.generateToken(any(), any(UserDetails.class))).thenReturn("mockJwtToken");
+
+        AuthResponse response = authService.login(request);
+
+        assertNotNull(response);
+        assertEquals("mockJwtToken", response.token());
+        assertEquals(email, response.email());
+        assertEquals("Test User", response.name());
+        assertEquals(Role.ROLE_USER, response.role());
+        assertEquals(ApprovalStatus.APPROVED, response.approvalStatus());
+    }
+
+    @Test
     void login_UserNotFound_ThrowsException() {
         LoginRequest request = new LoginRequest(email, "password123");
         when(userRepository.findByEmail(email.toLowerCase())).thenReturn(Optional.empty());
+
+        assertThrows(InvalidCredentialsException.class, () -> authService.login(request));
+    }
+
+    @Test
+    void login_PhoneUserNotFound_ThrowsException() {
+        String phone = "9174686803";
+        LoginRequest request = new LoginRequest(phone, "password123");
+        when(userRepository.findByPhoneNumber(phone)).thenReturn(Optional.empty());
 
         assertThrows(InvalidCredentialsException.class, () -> authService.login(request));
     }

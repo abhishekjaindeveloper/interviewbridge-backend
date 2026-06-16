@@ -35,8 +35,10 @@ import lombok.experimental.SuperBuilder;
  */
 @Entity
 @Table(name = EntityConstants.User.TABLE_NAME, uniqueConstraints = {
-		@UniqueConstraint(name = EntityConstants.User.UQ_EMAIL, columnNames = EntityConstants.User.COL_EMAIL) }, indexes = {
+		@UniqueConstraint(name = EntityConstants.User.UQ_EMAIL, columnNames = EntityConstants.User.COL_EMAIL),
+		@UniqueConstraint(name = EntityConstants.User.UQ_PHONE_NUMBER, columnNames = EntityConstants.User.COL_PHONE_NUMBER) }, indexes = {
 				@Index(name = EntityConstants.User.IDX_EMAIL, columnList = EntityConstants.User.COL_EMAIL),
+				@Index(name = EntityConstants.User.IDX_PHONE_NUMBER, columnList = EntityConstants.User.COL_PHONE_NUMBER),
 				@Index(name = EntityConstants.User.IDX_TECHNOLOGY_ID, columnList = EntityConstants.User.COL_TECHNOLOGY_ID),
 				@Index(name = EntityConstants.User.IDX_EXPERIENCE_ID, columnList = EntityConstants.User.COL_EXPERIENCE_ID) })
 @Getter
@@ -63,6 +65,16 @@ public class User extends BaseEntity {
 	@Size(max = EntityConstants.User.EMAIL_MAX_LENGTH, message = EntityConstants.User.MSG_EMAIL_SIZE)
 	@Column(name = EntityConstants.User.COL_EMAIL, nullable = false, length = EntityConstants.User.EMAIL_MAX_LENGTH)
 	private String email;
+
+	@Size(max = EntityConstants.User.PHONE_NUMBER_MAX_LENGTH, message = EntityConstants.User.MSG_PHONE_NUMBER_SIZE)
+	@Column(name = EntityConstants.User.COL_PHONE_NUMBER, length = EntityConstants.User.PHONE_NUMBER_MAX_LENGTH)
+	private String phoneNumber;
+
+	@Column(name = EntityConstants.User.COL_TERMS_ACCEPTED)
+	private Boolean termsAccepted;
+
+	@Column(name = EntityConstants.User.COL_TERMS_ACCEPTED_AT)
+	private java.time.LocalDateTime termsAcceptedAt;
 
 	@NotBlank(message = EntityConstants.User.MSG_PASSWORD_BLANK)
 	@Size(min = EntityConstants.User.PASSWORD_MIN_LENGTH, max = EntityConstants.User.PASSWORD_MAX_LENGTH, message = EntityConstants.User.MSG_PASSWORD_SIZE)

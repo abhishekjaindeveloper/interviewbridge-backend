@@ -3,6 +3,7 @@ package com.interviewbridge.request;
 import com.interviewbridge.constants.EntityConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -17,6 +18,13 @@ public record RegisterRequest(
     @Email(message = EntityConstants.User.MSG_EMAIL_INVALID)
     @Size(max = EntityConstants.User.EMAIL_MAX_LENGTH, message = EntityConstants.User.MSG_EMAIL_SIZE)
     String email,
+
+    @NotBlank(message = EntityConstants.User.MSG_PHONE_NUMBER_BLANK)
+    @Pattern(regexp = "^[0-9]{10}$", message = EntityConstants.User.MSG_PHONE_NUMBER_INVALID)
+    @Size(max = EntityConstants.User.PHONE_NUMBER_MAX_LENGTH, message = EntityConstants.User.MSG_PHONE_NUMBER_SIZE)
+    String phoneNumber,
+
+    Boolean termsAccepted,
 
     @NotBlank(message = EntityConstants.User.MSG_PASSWORD_BLANK)
     @Size(min = EntityConstants.User.PASSWORD_MIN_LENGTH, max = EntityConstants.User.PASSWORD_MAX_LENGTH, message = EntityConstants.User.MSG_PASSWORD_SIZE)

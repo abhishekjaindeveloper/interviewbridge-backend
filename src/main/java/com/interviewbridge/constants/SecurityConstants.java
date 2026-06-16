@@ -160,4 +160,18 @@ public final class SecurityConstants {
     public static final String MSG_JWT_SECRET_REQUIRED = "JWT secret key must not be null or empty.";
     public static final String MSG_JWT_SECRET_INSUFFICIENT_LENGTH = "JWT secret key must be at least 256 bits (32 bytes) long when decoded from Base64 for HS256 algorithm.";
     public static final String MSG_JWT_SECRET_INVALID_BASE64 = "JWT secret key is not a valid Base64 encoded string.";
+
+    // Default Admin Bootstrap constants
+    public static final String ADMIN_DEFAULT_PASSWORD_PROP = "${app.admin.default-password}";
+    public static final String ADMIN_BOOTSTRAP_NAME = "Abhishek Jain";
+    public static final String ADMIN_BOOTSTRAP_EMAIL = "abhishek@gmail.com";
+    public static final String ADMIN_BOOTSTRAP_PHONE = "9174686803";
+    public static final String ADMIN_BOOTSTRAP_CREATED_BY = "SYSTEM_BOOTSTRAP";
+    public static final String MSG_ADMIN_BOOTSTRAP_SUCCESS = "Default admin account bootstrapped successfully: {}";
+    public static final String MSG_ADMIN_BOOTSTRAP_EXISTS = "Admin account already exists. Bootstrapping skipped.";
+    public static final String MSG_INACTIVE_ACCOUNT = "Your account is currently inactive.";
+    
+    // Pattern and Unique Validation Constants
+    public static final String EMAIL_PATTERN = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
+    public static final String MSG_PHONE_EXISTS = "User with this phone number already exists: ";
 }

@@ -1,6 +1,7 @@
 package com.interviewbridge.repository;
 
 import com.interviewbridge.Enum.ApprovalStatus;
+import com.interviewbridge.Enum.Role;
 import com.interviewbridge.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,30 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return true if the email is already registered
      */
     boolean existsByEmail(String email);
+
+    /**
+     * Finds a user by their unique phone number.
+     *
+     * @param phoneNumber the user phone number to search
+     * @return an Optional containing the User if found
+     */
+    Optional<User> findByPhoneNumber(String phoneNumber);
+
+    /**
+     * Checks if a user already exists with the given phone number.
+     *
+     * @param phoneNumber the phone number to verify
+     * @return true if the phone number is already registered
+     */
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    /**
+     * Checks if a user already exists with the given role.
+     *
+     * @param role the role to verify
+     * @return true if a user with the given role exists
+     */
+    boolean existsByRole(Role role);
 
     /**
      * Finds all users with a specific registration approval status.

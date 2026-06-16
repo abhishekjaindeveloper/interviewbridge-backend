@@ -42,13 +42,29 @@ public class AuthServiceImpl implements AuthService {
             throw new DuplicateResourceException(SecurityConstants.MSG_EMAIL_EXISTS + normalizedEmail);
         }
 
+        String normalizedPhone = request.phoneNumber() != null ? request.phoneNumber().trim() : null;
+        if (normalizedPhone != null && !normalizedPhone.isEmpty()) {
+            if (userRepository.existsByPhoneNumber(normalizedPhone)) {
+                throw new DuplicateResourceException(SecurityConstants.MSG_PHONE_EXISTS + normalizedPhone);
+            }
+        }
+
+        Boolean termsAccepted = request.termsAccepted();
+        java.time.LocalDateTime termsAcceptedAt = null;
+        if (Boolean.TRUE.equals(termsAccepted)) {
+            termsAcceptedAt = java.time.LocalDateTime.now();
+        }
+
         User user = User.builder()
             .name(request.name())
             .email(normalizedEmail)
+            .phoneNumber(normalizedPhone)
             .password(passwordEncoder.encode(request.password()))
             .role(Role.ROLE_USER)
             .approvalStatus(ApprovalStatus.PENDING)
             .isActive(true)
+            .termsAccepted(termsAccepted)
+            .termsAcceptedAt(termsAcceptedAt)
             .build();
 
         User savedUser = userRepository.save(user);
@@ -65,9 +81,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
-        String normalizedEmail = request.email() != null ? request.email().trim().toLowerCase() : null;
-        User user = userRepository.findByEmail(normalizedEmail)
-            .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS));
+        String identifier = request.email() != null ? request.email().trim() : "";
+        User user;
+        if (identifier.matches(SecurityConstants.EMAIL_PATTERN)) {
+            String normalizedEmail = identifier.toLowerCase();
+            user = userRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS));
+        } else {
+            String normalizedPhone = identifier; // already trimmed
+            user = userRepository.findByPhoneNumber(normalizedPhone)
+                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS));
+        }
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS);
@@ -79,6 +103,10 @@ public class AuthServiceImpl implements AuthService {
 
         if (user.getApprovalStatus() == ApprovalStatus.REJECTED) {
             throw new InvalidCredentialsException(SecurityConstants.MSG_REJECTED_ACCOUNT);
+        }
+
+        if (Boolean.FALSE.equals(user.getIsActive())) {
+            throw new InvalidCredentialsException(SecurityConstants.MSG_INACTIVE_ACCOUNT);
         }
 
         // Generate JWT token
