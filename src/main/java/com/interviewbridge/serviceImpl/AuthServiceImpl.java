@@ -3,11 +3,14 @@ package com.interviewbridge.serviceImpl;
 import com.interviewbridge.Enum.ApprovalStatus;
 import com.interviewbridge.Enum.Role;
 import com.interviewbridge.config.JwtService;
+import com.interviewbridge.constants.EntityConstants;
 import com.interviewbridge.constants.SecurityConstants;
 import com.interviewbridge.entity.User;
 import com.interviewbridge.exception.AccountPendingApprovalException;
 import com.interviewbridge.exception.DuplicateResourceException;
 import com.interviewbridge.exception.InvalidCredentialsException;
+import com.interviewbridge.exception.InvalidOperationException;
+import com.interviewbridge.exception.UserAccountRejectedException;
 import com.interviewbridge.request.LoginRequest;
 import com.interviewbridge.request.RegisterRequest;
 import com.interviewbridge.response.AuthResponse;
@@ -45,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         String normalizedPhone = request.phoneNumber() != null ? request.phoneNumber().trim() : null;
         if (normalizedPhone != null && !normalizedPhone.isEmpty()) {
             if (userRepository.existsByPhoneNumber(normalizedPhone)) {
-                throw new DuplicateResourceException(SecurityConstants.MSG_PHONE_EXISTS + normalizedPhone);
+                throw new DuplicateResourceException(SecurityConstants.MSG_PHONE_ALREADY_REGISTERED);
             }
         }
 
@@ -73,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
             null, // No token generated until approved
             savedUser.getEmail(),
             savedUser.getName(),
+            savedUser.getPhoneNumber(),
             savedUser.getRole(),
             savedUser.getApprovalStatus()
         );
@@ -82,19 +86,24 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
         String identifier = request.email() != null ? request.email().trim() : "";
+        if (!identifier.isEmpty() && Character.isDigit(identifier.charAt(0))) {
+            if (!identifier.matches("^[6-9][0-9]{9}$")) {
+                throw new InvalidOperationException(EntityConstants.User.MSG_PHONE_NUMBER_INVALID);
+            }
+        }
         User user;
         if (identifier.matches(SecurityConstants.EMAIL_PATTERN)) {
             String normalizedEmail = identifier.toLowerCase();
             user = userRepository.findByEmail(normalizedEmail)
-                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS));
+                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_USER_NOT_FOUND_LOGIN));
         } else {
             String normalizedPhone = identifier; // already trimmed
             user = userRepository.findByPhoneNumber(normalizedPhone)
-                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS));
+                .orElseThrow(() -> new InvalidCredentialsException(SecurityConstants.MSG_USER_NOT_FOUND_LOGIN));
         }
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new InvalidCredentialsException(SecurityConstants.MSG_INVALID_CREDENTIALS);
+            throw new InvalidCredentialsException(SecurityConstants.MSG_INCORRECT_PASSWORD);
         }
 
         if (user.getApprovalStatus() == ApprovalStatus.PENDING) {
@@ -102,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (user.getApprovalStatus() == ApprovalStatus.REJECTED) {
-            throw new InvalidCredentialsException(SecurityConstants.MSG_REJECTED_ACCOUNT);
+            throw new UserAccountRejectedException(SecurityConstants.MSG_REJECTED_ACCOUNT, user.getRejectionReason());
         }
 
         if (Boolean.FALSE.equals(user.getIsActive())) {
@@ -130,6 +139,7 @@ public class AuthServiceImpl implements AuthService {
             token,
             user.getEmail(),
             user.getName(),
+            user.getPhoneNumber(),
             user.getRole(),
             user.getApprovalStatus()
         );

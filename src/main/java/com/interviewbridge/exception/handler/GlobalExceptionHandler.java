@@ -7,6 +7,7 @@ import com.interviewbridge.exception.InvalidCredentialsException;
 import com.interviewbridge.exception.ResourceNotFoundException;
 import com.interviewbridge.exception.UnauthorizedException;
 import com.interviewbridge.exception.InvalidOperationException;
+import com.interviewbridge.exception.UserAccountRejectedException;
 import com.interviewbridge.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,17 @@ public class GlobalExceptionHandler {
             false,
             ex.getMessage(),
             LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UserAccountRejectedException.class)
+    public ResponseEntity<ErrorResponse> handleUserAccountRejectedException(UserAccountRejectedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+            false,
+            ex.getMessage(),
+            LocalDateTime.now(),
+            ex.getRejectionReason()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }

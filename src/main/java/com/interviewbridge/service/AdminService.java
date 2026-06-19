@@ -1,6 +1,10 @@
 package com.interviewbridge.service;
 
+import com.interviewbridge.Enum.ApprovalStatus;
 import com.interviewbridge.response.AdminUserResponse;
+import com.interviewbridge.response.AdminUserStatisticsResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +31,28 @@ public interface AdminService {
     /**
      * Rejects a user's registration.
      *
-     * @param id the user UUID to reject
+     * @param id     the user UUID to reject
+     * @param reason the reason for rejection
      */
-    void rejectUser(UUID id);
+    void rejectUser(UUID id, String reason);
+
+    /**
+     * Retrieves a paginated, filtered, and searched list of users.
+     */
+    Page<AdminUserResponse> getUsers(Pageable pageable, ApprovalStatus approvalStatus, Boolean isActive, String search);
+
+    /**
+     * Activates a user account.
+     */
+    void activateUser(UUID id);
+
+    /**
+     * Deactivates a user account.
+     */
+    void deactivateUser(UUID id);
+
+    /**
+     * Retrieves user account counts by status and active state.
+     */
+    AdminUserStatisticsResponse getUserStatistics();
 }

@@ -6,6 +6,10 @@ import com.interviewbridge.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,4 +67,27 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return a list of Users matching the status
      */
     List<User> findByApprovalStatus(ApprovalStatus approvalStatus);
+
+    /**
+     * Finds all users matching optional status, active flag, and search query.
+     */
+    @Query("SELECT u FROM User u WHERE " +
+           "u.email <> :loggedInEmail " +
+           "AND u.approvalStatus <> com.interviewbridge.Enum.ApprovalStatus.REJECTED " +
+           "AND (:search IS NULL OR :search = '' OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "OR LOWER(u.phoneNumber) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+           "AND (:approvalStatus IS NULL OR u.approvalStatus = :approvalStatus) " +
+           "AND (:isActive IS NULL OR u.isActive = :isActive)")
+    Page<User> findAllFilteredAndSearched(
+        @Param("search") String search,
+        @Param("approvalStatus") ApprovalStatus approvalStatus,
+        @Param("isActive") Boolean isActive,
+        @Param("loggedInEmail") String loggedInEmail,
+        Pageable pageable
+    );
+
+    long countByApprovalStatusNot(ApprovalStatus approvalStatus);
+    long countByIsActiveAndApprovalStatus(Boolean isActive, ApprovalStatus approvalStatus);
+    long countByApprovalStatus(ApprovalStatus approvalStatus);
 }

@@ -20,7 +20,7 @@ public record RegisterRequest(
     String email,
 
     @NotBlank(message = EntityConstants.User.MSG_PHONE_NUMBER_BLANK)
-    @Pattern(regexp = "^[0-9]{10}$", message = EntityConstants.User.MSG_PHONE_NUMBER_INVALID)
+    @Pattern(regexp = "^[6-9][0-9]{9}$", message = EntityConstants.User.MSG_PHONE_NUMBER_INVALID)
     @Size(max = EntityConstants.User.PHONE_NUMBER_MAX_LENGTH, message = EntityConstants.User.MSG_PHONE_NUMBER_SIZE)
     String phoneNumber,
 

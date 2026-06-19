@@ -10,6 +10,7 @@ public record UserProfileResponse(
     UUID userId,
     String name,
     String email,
+    String phoneNumber,
     Role role,
     TechnologyResponse technology,
     ExperienceResponse experience

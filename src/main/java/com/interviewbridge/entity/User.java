@@ -99,4 +99,13 @@ public class User extends BaseEntity {
 	@ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
 	@JoinColumn(name = EntityConstants.User.COL_EXPERIENCE_ID)
 	private ExperienceMaster experience;
+
+	@Column(name = EntityConstants.User.COL_REJECTION_REASON, length = EntityConstants.User.REJECTION_REASON_MAX_LENGTH)
+	private String rejectionReason;
+
+	@Column(name = EntityConstants.User.COL_REJECTED_AT)
+	private java.time.LocalDateTime rejectedAt;
+
+	@Column(name = EntityConstants.User.COL_REJECTED_BY)
+	private String rejectedBy;
 }

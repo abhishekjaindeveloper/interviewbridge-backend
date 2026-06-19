@@ -31,6 +31,11 @@ public final class SecurityConstants {
     public static final String ADMIN_USERS_PENDING_URL = "/api/admin/users/pending";
     public static final String ADMIN_USERS_APPROVE_URL = "/api/admin/users/{id}/approve";
     public static final String ADMIN_USERS_REJECT_URL = "/api/admin/users/{id}/reject";
+    public static final String ADMIN_USERS_BASE_URL = "/api/admin/users";
+    public static final String ADMIN_USERS_SEARCH_URL = "/api/admin/users/search";
+    public static final String ADMIN_USERS_ACTIVATE_URL = "/api/admin/users/{id}/activate";
+    public static final String ADMIN_USERS_DEACTIVATE_URL = "/api/admin/users/{id}/deactivate";
+    public static final String ADMIN_USERS_STATISTICS_URL = "/api/admin/users/statistics";
     public static final String PATH_VAR_ID = "id";
 
     // Roles and Authorities
@@ -58,8 +63,12 @@ public final class SecurityConstants {
     public static final String MSG_PENDING_APPROVAL = "Your account is pending admin approval.";
     public static final String MSG_REJECTED_ACCOUNT = "Your account registration was rejected by the admin.";
     public static final String MSG_INVALID_CREDENTIALS = "Invalid email or password.";
+    public static final String MSG_USER_NOT_FOUND_LOGIN = "Email or phone number not found.";
+    public static final String MSG_INCORRECT_PASSWORD = "Incorrect password.";
     public static final String MSG_USER_APPROVED_SUCCESS = "User approved successfully.";
     public static final String MSG_USER_REJECTED_SUCCESS = "User registration rejected successfully.";
+    public static final String MSG_USER_ACTIVATED_SUCCESS = "User activated successfully.";
+    public static final String MSG_USER_DEACTIVATED_SUCCESS = "User deactivated successfully.";
     public static final String MSG_USER_REGISTERED_SUCCESS = "User registered successfully, pending admin approval.";
     public static final String MSG_LOGIN_SUCCESS = "Login successful.";
     public static final String MSG_INVALID_APPROVAL_STATUS = "Only users in PENDING status can be approved or rejected.";
@@ -174,4 +183,5 @@ public final class SecurityConstants {
     // Pattern and Unique Validation Constants
     public static final String EMAIL_PATTERN = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
     public static final String MSG_PHONE_EXISTS = "User with this phone number already exists: ";
+    public static final String MSG_PHONE_ALREADY_REGISTERED = "Phone number already registered.";
 }

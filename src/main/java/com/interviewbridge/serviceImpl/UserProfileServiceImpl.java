@@ -114,6 +114,7 @@ public class UserProfileServiceImpl implements UserProfileService {
             user.getId(),
             user.getName(),
             user.getEmail(),
+            user.getPhoneNumber(),
             user.getRole(),
             techResponse,
             expResponse

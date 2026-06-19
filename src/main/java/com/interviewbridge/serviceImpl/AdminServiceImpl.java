@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.interviewbridge.response.AdminUserStatisticsResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -52,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void rejectUser(UUID id) {
+    public void rejectUser(UUID id, String reason) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(SecurityConstants.MSG_USER_NOT_FOUND_ID + id));
         
@@ -61,7 +64,57 @@ public class AdminServiceImpl implements AdminService {
         }
         
         user.setApprovalStatus(ApprovalStatus.REJECTED);
+        user.setRejectionReason(reason);
+        user.setRejectedAt(java.time.LocalDateTime.now());
+        
+        String adminEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        user.setRejectedBy(adminEmail);
+        
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AdminUserResponse> getUsers(Pageable pageable, ApprovalStatus approvalStatus, Boolean isActive, String search) {
+        String loggedInEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findAllFilteredAndSearched(search, approvalStatus, isActive, loggedInEmail, pageable)
+            .map(this::mapToResponse);
+    }
+
+    @Override
+    @Transactional
+    public void activateUser(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(SecurityConstants.MSG_USER_NOT_FOUND_ID + id));
+        String loggedInEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        if (user.getEmail().equalsIgnoreCase(loggedInEmail)) {
+            throw new InvalidOperationException("You cannot activate or deactivate your own administrator account.");
+        }
+        user.setIsActive(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deactivateUser(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(SecurityConstants.MSG_USER_NOT_FOUND_ID + id));
+        String loggedInEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+        if (user.getEmail().equalsIgnoreCase(loggedInEmail)) {
+            throw new InvalidOperationException("You cannot activate or deactivate your own administrator account.");
+        }
+        user.setIsActive(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AdminUserStatisticsResponse getUserStatistics() {
+        long total = userRepository.countByApprovalStatusNot(ApprovalStatus.REJECTED);
+        long active = userRepository.countByIsActiveAndApprovalStatus(true, ApprovalStatus.APPROVED);
+        long inactive = userRepository.countByIsActiveAndApprovalStatus(false, ApprovalStatus.APPROVED);
+        long pending = userRepository.countByApprovalStatus(ApprovalStatus.PENDING);
+        return new AdminUserStatisticsResponse(total, active, inactive, pending);
     }
 
     private AdminUserResponse mapToResponse(User user) {

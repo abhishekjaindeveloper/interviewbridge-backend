@@ -10,6 +10,7 @@ public record AuthResponse(
     String token,
     String email,
     String name,
+    String phoneNumber,
     Role role,
     ApprovalStatus approvalStatus
 ) {}

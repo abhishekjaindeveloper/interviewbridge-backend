@@ -8,5 +8,10 @@ import java.time.LocalDateTime;
 public record ErrorResponse(
     boolean success,
     String message,
-    LocalDateTime timestamp
-) {}
+    LocalDateTime timestamp,
+    String rejectionReason
+) {
+    public ErrorResponse(boolean success, String message, LocalDateTime timestamp) {
+        this(success, message, timestamp, null);
+    }
+}

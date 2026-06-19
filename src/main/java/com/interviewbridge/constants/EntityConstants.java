@@ -33,6 +33,9 @@ public class EntityConstants {
         public static final String COL_PASSWORD = "password";
         public static final String COL_ROLE = "role";
         public static final String COL_APPROVAL_STATUS = "approval_status";
+        public static final String COL_REJECTION_REASON = "rejection_reason";
+        public static final String COL_REJECTED_AT = "rejected_at";
+        public static final String COL_REJECTED_BY = "rejected_by";
 
         public static final String UQ_EMAIL = "uq_ib_user_email";
         public static final String UQ_PHONE_NUMBER = "uq_ib_user_phone_number";
@@ -43,6 +46,8 @@ public class EntityConstants {
 
         // Field Length Limits
         public static final int NAME_MAX_LENGTH = 100;
+        public static final int REJECTION_REASON_MIN_LENGTH = 10;
+        public static final int REJECTION_REASON_MAX_LENGTH = 500;
         public static final int EMAIL_MAX_LENGTH = 255;
         public static final int PHONE_NUMBER_MAX_LENGTH = 20;
         public static final int PASSWORD_MIN_LENGTH = 8;
@@ -56,12 +61,14 @@ public class EntityConstants {
         public static final String MSG_EMAIL_SIZE = "Email must not exceed 255 characters";
         public static final String MSG_PHONE_NUMBER_SIZE = "Phone number must not exceed 20 characters";
         public static final String MSG_PHONE_NUMBER_BLANK = "Phone number cannot be blank";
-        public static final String MSG_PHONE_NUMBER_INVALID = "Phone number must be a valid mobile format";
+        public static final String MSG_PHONE_NUMBER_INVALID = "Please enter a valid 10-digit mobile number.";
         public static final String MSG_PASSWORD_BLANK = "Password cannot be blank";
         public static final String MSG_PASSWORD_SIZE = "Password must be between 8 and 255 characters";
         public static final String MSG_ROLE_REQUIRED = "Role is required";
         public static final String MSG_APPROVAL_STATUS_REQUIRED = "Approval status is required";
         public static final String MSG_IDENTIFIER_BLANK = "Email or Phone Number cannot be blank";
+        public static final String MSG_REJECTION_REASON_BLANK = "Rejection reason cannot be blank";
+        public static final String MSG_REJECTION_REASON_SIZE = "Rejection reason must be between 10 and 500 characters";
 
         public static final String COL_TECHNOLOGY_ID = "technology_id";
         public static final String COL_EXPERIENCE_ID = "experience_id";
