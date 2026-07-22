@@ -1,8 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.SubmitAnswerRequest;
-import com.interviewbridge.response.PracticeQuestionResponse;
-import com.interviewbridge.response.SubmitAnswerResponse;
+import com.interviewbridge.dto.request.SubmitAnswerRequest;
+import com.interviewbridge.dto.response.PracticeQuestionResponse;
+import com.interviewbridge.dto.response.SubmitAnswerResponse;
 
 import java.util.UUID;
 
@@ -30,3 +30,4 @@ public interface PracticeAnswerService {
      */
     PracticeQuestionResponse getQuestionDetails(String email, UUID questionId);
 }
+

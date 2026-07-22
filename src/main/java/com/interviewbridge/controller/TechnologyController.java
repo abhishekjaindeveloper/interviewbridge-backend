@@ -1,10 +1,10 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.TechnologyCreateRequest;
-import com.interviewbridge.request.TechnologyUpdateRequest;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.TechnologyResponse;
+import com.interviewbridge.dto.request.TechnologyCreateRequest;
+import com.interviewbridge.dto.request.TechnologyUpdateRequest;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.TechnologyResponse;
 import com.interviewbridge.service.TechnologyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -159,3 +159,4 @@ public class TechnologyController {
         ));
     }
 }
+

@@ -1,7 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.UserProfileSetupRequest;
-import com.interviewbridge.response.UserProfileResponse;
+import com.interviewbridge.dto.request.UserProfileSetupRequest;
+import com.interviewbridge.dto.response.UserProfileResponse;
+import com.interviewbridge.dto.response.UserStatusResponse;
 
 /**
  * Service interface for managing user profile details.
@@ -33,4 +34,13 @@ public interface UserProfileService {
      * @return the user profile response
      */
     UserProfileResponse getProfile(String email);
+
+    /**
+     * Retrieves the status details of the logged-in user.
+     *
+     * @param email the user email from security context
+     * @return the user status response
+     */
+    UserStatusResponse getUserStatus(String email);
 }
+

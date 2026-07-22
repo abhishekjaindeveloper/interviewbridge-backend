@@ -1,8 +1,8 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.PracticeQuestionResponse;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.PracticeQuestionResponse;
 import com.interviewbridge.service.PracticeQuestionService;
 
 import lombok.RequiredArgsConstructor;
@@ -92,3 +92,4 @@ public class PracticeQuestionController {
         ));
     }
 }
+

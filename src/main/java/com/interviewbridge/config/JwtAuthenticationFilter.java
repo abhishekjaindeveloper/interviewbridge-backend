@@ -1,5 +1,6 @@
 package com.interviewbridge.config;
 
+import com.interviewbridge.security.JwtService;
 import com.interviewbridge.constants.SecurityConstants;
 import com.interviewbridge.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -1,9 +1,10 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.UserProfileSetupRequest;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.UserProfileResponse;
+import com.interviewbridge.dto.request.UserProfileSetupRequest;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.UserProfileResponse;
+import com.interviewbridge.dto.response.UserStatusResponse;
 import com.interviewbridge.service.UserProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -87,4 +88,24 @@ public class UserProfileController {
             response
         ));
     }
+
+    /**
+     * Endpoint to validate user token/status and retrieve status details.
+     *
+     * @param principal the authenticated user context
+     * @return response entity containing user status details
+     */
+    @GetMapping(SecurityConstants.USER_ME_URL)
+    public ResponseEntity<ApiResponse<UserStatusResponse>> getMe(
+        Principal principal
+    ) {
+        String email = principal.getName();
+        UserStatusResponse response = userProfileService.getUserStatus(email);
+        return ResponseEntity.ok(new ApiResponse<>(
+            true,
+            null,
+            response
+        ));
+    }
 }
+

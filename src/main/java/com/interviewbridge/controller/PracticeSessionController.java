@@ -1,9 +1,9 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.StartPracticeSessionRequest;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.PracticeSessionResponse;
+import com.interviewbridge.dto.request.StartPracticeSessionRequest;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.PracticeSessionResponse;
 import com.interviewbridge.service.PracticeSessionService;
 
 import jakarta.validation.Valid;
@@ -91,3 +91,4 @@ public class PracticeSessionController {
         ));
     }
 }
+

@@ -1,10 +1,10 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.LoginRequest;
-import com.interviewbridge.request.RegisterRequest;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.AuthResponse;
+import com.interviewbridge.dto.request.LoginRequest;
+import com.interviewbridge.dto.request.RegisterRequest;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.AuthResponse;
 import com.interviewbridge.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,3 +54,4 @@ public class AuthController {
         ));
     }
 }
+

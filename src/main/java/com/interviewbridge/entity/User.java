@@ -2,8 +2,8 @@ package com.interviewbridge.entity;
 
 import java.util.UUID;
 
-import com.interviewbridge.Enum.ApprovalStatus;
-import com.interviewbridge.Enum.Role;
+import com.interviewbridge.enums.ApprovalStatus;
+import com.interviewbridge.enums.Role;
 import com.interviewbridge.common.BaseEntity;
 import com.interviewbridge.constants.EntityConstants;
 
@@ -109,3 +109,4 @@ public class User extends BaseEntity {
 	@Column(name = EntityConstants.User.COL_REJECTED_BY)
 	private String rejectedBy;
 }
+

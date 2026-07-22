@@ -1,8 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.ExperienceCreateRequest;
-import com.interviewbridge.request.ExperienceUpdateRequest;
-import com.interviewbridge.response.ExperienceResponse;
+import com.interviewbridge.dto.request.ExperienceCreateRequest;
+import com.interviewbridge.dto.request.ExperienceUpdateRequest;
+import com.interviewbridge.dto.response.ExperienceResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -65,3 +65,4 @@ public interface ExperienceService {
      */
     void deactivateExperience(UUID id);
 }
+

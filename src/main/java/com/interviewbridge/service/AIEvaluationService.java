@@ -1,7 +1,7 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.AIEvaluationRequest;
-import com.interviewbridge.response.AIEvaluationResponse;
+import com.interviewbridge.dto.request.AIEvaluationRequest;
+import com.interviewbridge.dto.response.AIEvaluationResponse;
 
 /**
  * Service interface for communicating with the AI evaluation provider.
@@ -16,3 +16,4 @@ public interface AIEvaluationService {
      */
     AIEvaluationResponse evaluateAnswer(AIEvaluationRequest request);
 }
+

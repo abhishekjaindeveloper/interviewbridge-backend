@@ -106,6 +106,7 @@ public final class SecurityConstants {
     // User Profile Endpoint Paths
     public static final String USER_PROFILE_SETUP_URL = "/api/user/profile/setup";
     public static final String USER_PROFILE_URL = "/api/user/profile";
+    public static final String USER_ME_URL = "/api/user/me";
 
     // User Profile Messages
     public static final String MSG_PROFILE_SETUP_SUCCESS = "User profile set up successfully.";

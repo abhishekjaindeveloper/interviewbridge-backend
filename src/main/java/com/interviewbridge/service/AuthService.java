@@ -1,8 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.LoginRequest;
-import com.interviewbridge.request.RegisterRequest;
-import com.interviewbridge.response.AuthResponse;
+import com.interviewbridge.dto.request.LoginRequest;
+import com.interviewbridge.dto.request.RegisterRequest;
+import com.interviewbridge.dto.response.AuthResponse;
 
 /**
  * Service interface defining user registration and authentication business rules.
@@ -25,3 +25,4 @@ public interface AuthService {
      */
     AuthResponse login(LoginRequest request);
 }
+

@@ -8,7 +8,7 @@ import com.interviewbridge.exception.ResourceNotFoundException;
 import com.interviewbridge.exception.UnauthorizedException;
 import com.interviewbridge.exception.InvalidOperationException;
 import com.interviewbridge.exception.UserAccountRejectedException;
-import com.interviewbridge.response.ErrorResponse;
+import com.interviewbridge.dto.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -145,3 +145,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+

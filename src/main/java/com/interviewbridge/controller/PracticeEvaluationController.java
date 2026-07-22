@@ -1,8 +1,8 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.EvaluationResultResponse;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.EvaluationResultResponse;
 import com.interviewbridge.service.PracticeEvaluationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -67,3 +67,4 @@ public class PracticeEvaluationController {
         ));
     }
 }
+

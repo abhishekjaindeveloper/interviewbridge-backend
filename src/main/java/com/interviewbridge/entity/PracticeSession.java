@@ -1,6 +1,6 @@
 package com.interviewbridge.entity;
 
-import com.interviewbridge.Enum.SessionStatus;
+import com.interviewbridge.enums.SessionStatus;
 import com.interviewbridge.common.BaseEntity;
 import com.interviewbridge.constants.EntityConstants;
 
@@ -96,3 +96,4 @@ public class PracticeSession extends BaseEntity {
     @Column(name = EntityConstants.PracticeSession.COL_COMPLETED_AT)
     private LocalDateTime completedAt;
 }
+

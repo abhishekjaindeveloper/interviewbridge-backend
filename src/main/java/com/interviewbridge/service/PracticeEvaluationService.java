@@ -1,6 +1,6 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.response.EvaluationResultResponse;
+import com.interviewbridge.dto.response.EvaluationResultResponse;
 import java.util.UUID;
 
 /**
@@ -26,3 +26,4 @@ public interface PracticeEvaluationService {
      */
     EvaluationResultResponse getEvaluationResults(String email, UUID questionId);
 }
+

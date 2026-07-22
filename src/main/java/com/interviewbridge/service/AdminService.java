@@ -1,8 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.Enum.ApprovalStatus;
-import com.interviewbridge.response.AdminUserResponse;
-import com.interviewbridge.response.AdminUserStatisticsResponse;
+import com.interviewbridge.enums.ApprovalStatus;
+import com.interviewbridge.dto.response.AdminUserResponse;
+import com.interviewbridge.dto.response.AdminUserStatisticsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -56,3 +56,4 @@ public interface AdminService {
      */
     AdminUserStatisticsResponse getUserStatistics();
 }
+

@@ -1,7 +1,7 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.StartPracticeSessionRequest;
-import com.interviewbridge.response.PracticeSessionResponse;
+import com.interviewbridge.dto.request.StartPracticeSessionRequest;
+import com.interviewbridge.dto.response.PracticeSessionResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,3 +37,4 @@ public interface PracticeSessionService {
      */
     List<PracticeSessionResponse> getSessionsForUser(String email);
 }
+

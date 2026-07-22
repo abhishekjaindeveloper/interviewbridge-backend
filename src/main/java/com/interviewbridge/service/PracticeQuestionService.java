@@ -1,6 +1,6 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.response.PracticeQuestionResponse;
+import com.interviewbridge.dto.response.PracticeQuestionResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,3 +38,4 @@ public interface PracticeQuestionService {
      */
     PracticeQuestionResponse getQuestionByNumber(String email, UUID sessionId, Integer questionNumber);
 }
+

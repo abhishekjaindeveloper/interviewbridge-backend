@@ -1,9 +1,9 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.UserRejectionRequest;
-import com.interviewbridge.response.AdminUserResponse;
-import com.interviewbridge.response.ApiResponse;
+import com.interviewbridge.dto.request.UserRejectionRequest;
+import com.interviewbridge.dto.response.AdminUserResponse;
+import com.interviewbridge.dto.response.ApiResponse;
 import com.interviewbridge.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.interviewbridge.Enum.ApprovalStatus;
-import com.interviewbridge.response.AdminUserStatisticsResponse;
+import com.interviewbridge.enums.ApprovalStatus;
+import com.interviewbridge.dto.response.AdminUserStatisticsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -150,3 +150,4 @@ public class AdminController {
         return ResponseEntity.ok(new ApiResponse<>(true, null, stats));
     }
 }
+

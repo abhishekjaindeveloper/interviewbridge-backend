@@ -1,7 +1,7 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.AIQuestionRequest;
-import com.interviewbridge.response.AIQuestionResponse;
+import com.interviewbridge.dto.request.AIQuestionRequest;
+import com.interviewbridge.dto.response.AIQuestionResponse;
 
 import java.util.List;
 
@@ -18,3 +18,4 @@ public interface AIQuestionGenerationService {
      */
     List<AIQuestionResponse> generateQuestions(AIQuestionRequest request);
 }
+

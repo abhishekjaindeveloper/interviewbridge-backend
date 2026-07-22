@@ -1,7 +1,7 @@
 package com.interviewbridge.config;
 
-import com.interviewbridge.Enum.ApprovalStatus;
-import com.interviewbridge.Enum.Role;
+import com.interviewbridge.enums.ApprovalStatus;
+import com.interviewbridge.enums.Role;
 import com.interviewbridge.constants.SecurityConstants;
 import com.interviewbridge.entity.User;
 import com.interviewbridge.repository.UserRepository;
@@ -59,3 +59,4 @@ public class AdminBootstrapRunner implements ApplicationRunner {
         log.info(SecurityConstants.MSG_ADMIN_BOOTSTRAP_SUCCESS, SecurityConstants.ADMIN_BOOTSTRAP_EMAIL);
     }
 }
+

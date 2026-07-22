@@ -1,8 +1,8 @@
 package com.interviewbridge.service;
 
-import com.interviewbridge.request.TechnologyCreateRequest;
-import com.interviewbridge.request.TechnologyUpdateRequest;
-import com.interviewbridge.response.TechnologyResponse;
+import com.interviewbridge.dto.request.TechnologyCreateRequest;
+import com.interviewbridge.dto.request.TechnologyUpdateRequest;
+import com.interviewbridge.dto.response.TechnologyResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -65,3 +65,4 @@ public interface TechnologyService {
      */
     void deactivateTechnology(UUID id);
 }
+

@@ -1,10 +1,10 @@
 package com.interviewbridge.controller;
 
 import com.interviewbridge.constants.SecurityConstants;
-import com.interviewbridge.request.ExperienceCreateRequest;
-import com.interviewbridge.request.ExperienceUpdateRequest;
-import com.interviewbridge.response.ApiResponse;
-import com.interviewbridge.response.ExperienceResponse;
+import com.interviewbridge.dto.request.ExperienceCreateRequest;
+import com.interviewbridge.dto.request.ExperienceUpdateRequest;
+import com.interviewbridge.dto.response.ApiResponse;
+import com.interviewbridge.dto.response.ExperienceResponse;
 import com.interviewbridge.service.ExperienceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -159,3 +159,4 @@ public class ExperienceController {
         ));
     }
 }
+

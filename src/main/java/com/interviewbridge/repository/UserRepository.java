@@ -1,7 +1,7 @@
 package com.interviewbridge.repository;
 
-import com.interviewbridge.Enum.ApprovalStatus;
-import com.interviewbridge.Enum.Role;
+import com.interviewbridge.enums.ApprovalStatus;
+import com.interviewbridge.enums.Role;
 import com.interviewbridge.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -73,7 +73,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      */
     @Query("SELECT u FROM User u WHERE " +
            "u.email <> :loggedInEmail " +
-           "AND u.approvalStatus <> com.interviewbridge.Enum.ApprovalStatus.REJECTED " +
+           "AND u.approvalStatus <> com.interviewbridge.enums.ApprovalStatus.REJECTED " +
            "AND (:search IS NULL OR :search = '' OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
            "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) " +
            "OR LOWER(u.phoneNumber) LIKE LOWER(CONCAT('%', :search, '%'))) " +
@@ -91,3 +91,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     long countByIsActiveAndApprovalStatus(Boolean isActive, ApprovalStatus approvalStatus);
     long countByApprovalStatus(ApprovalStatus approvalStatus);
 }
+

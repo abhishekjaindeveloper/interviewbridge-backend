@@ -1,7 +1,7 @@
 package com.interviewbridge.entity;
 
-import com.interviewbridge.Enum.EvaluationStatus;
-import com.interviewbridge.Enum.QuestionStatus;
+import com.interviewbridge.enums.EvaluationStatus;
+import com.interviewbridge.enums.QuestionStatus;
 import com.interviewbridge.common.BaseEntity;
 import com.interviewbridge.constants.EntityConstants;
 
@@ -90,3 +90,4 @@ public class PracticeQuestion extends BaseEntity {
     @Column(name = EntityConstants.PracticeQuestion.COL_EVALUATED_AT)
     private LocalDateTime evaluatedAt;
 }
+
