@@ -16,6 +16,8 @@ import com.interviewbridge.dto.response.ExperienceResponse;
 import com.interviewbridge.dto.response.TechnologyResponse;
 import com.interviewbridge.dto.response.UserProfileResponse;
 import com.interviewbridge.dto.response.UserStatusResponse;
+import com.interviewbridge.enums.ProfileStatus;
+import com.interviewbridge.enums.WorkMode;
 import com.interviewbridge.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +62,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         user.setTechnology(tech);
         user.setExperience(exp);
-
+        setPreferencesFromRequest(user, request);
+        
         User savedUser = userRepository.save(user);
         return mapToResponse(savedUser);
     }
@@ -96,6 +99,8 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .orElseThrow(() -> new ResourceNotFoundException(SecurityConstants.MSG_EXP_NOT_FOUND + request.experienceId()));
             user.setExperience(exp);
         }
+
+        setPreferencesFromRequest(user, request);
 
         User savedUser = userRepository.save(user);
         return mapToResponse(savedUser);
@@ -147,6 +152,17 @@ public class UserProfileServiceImpl implements UserProfileService {
                 user.getExperience().getUpdatedAt()
             ) : null;
 
+        boolean hasTechnology = user.getTechnology() != null;
+        boolean hasExperience = user.getExperience() != null;
+        boolean hasPreferredJobRole = user.getPreferredJobRole() != null && !user.getPreferredJobRole().trim().isEmpty();
+        boolean hasPreferredLocation = user.getPreferredLocation() != null && !user.getPreferredLocation().trim().isEmpty();
+        boolean hasPreferredWorkMode = user.getPreferredWorkMode() != null;
+        boolean hasExpectedSalary = user.getExpectedSalary() != null && user.getExpectedSalary() > 0;
+
+        ProfileStatus profileStatus = (hasTechnology && hasExperience && hasPreferredJobRole && hasPreferredLocation && hasPreferredWorkMode && hasExpectedSalary)
+            ? ProfileStatus.COMPLETED
+            : ProfileStatus.INCOMPLETE;
+
         return new UserProfileResponse(
             user.getId(),
             user.getName(),
@@ -154,8 +170,52 @@ public class UserProfileServiceImpl implements UserProfileService {
             user.getPhoneNumber(),
             user.getRole(),
             techResponse,
-            expResponse
+            expResponse,
+            user.getPreferredJobRole(),
+            user.getPreferredLocation(),
+            user.getPreferredWorkMode(),
+            user.getExpectedSalary(),
+            user.getJobAlertEnabled() != null ? user.getJobAlertEnabled() : false,
+            profileStatus
         );
     }
-}
 
+    private void setPreferencesFromRequest(User user, UserProfileSetupRequest request) {
+        if (request.preferredJobRole() != null) {
+            String trimmedRole = request.preferredJobRole().trim();
+            if (trimmedRole.isEmpty()) {
+                throw new InvalidOperationException("Preferred job role is required");
+            }
+            if (trimmedRole.length() > EntityConstants.User.JOB_ROLE_MAX_LENGTH) {
+                throw new InvalidOperationException(EntityConstants.User.MSG_JOB_ROLE_SIZE);
+            }
+            user.setPreferredJobRole(trimmedRole);
+        }
+
+        if (request.preferredLocation() != null) {
+            String trimmedLocation = request.preferredLocation().trim();
+            if (trimmedLocation.isEmpty()) {
+                throw new InvalidOperationException("Preferred location is required");
+            }
+            if (trimmedLocation.length() > EntityConstants.User.LOCATION_MAX_LENGTH) {
+                throw new InvalidOperationException(EntityConstants.User.MSG_LOCATION_SIZE);
+            }
+            user.setPreferredLocation(trimmedLocation);
+        }
+
+        if (request.preferredWorkMode() != null) {
+            user.setPreferredWorkMode(request.preferredWorkMode());
+        }
+
+        if (request.expectedSalary() != null) {
+            if (request.expectedSalary() <= 0) {
+                throw new InvalidOperationException("Expected salary must be a positive number");
+            }
+            user.setExpectedSalary(request.expectedSalary());
+        }
+
+        if (request.jobAlertEnabled() != null) {
+            user.setJobAlertEnabled(request.jobAlertEnabled());
+        }
+    }
+}

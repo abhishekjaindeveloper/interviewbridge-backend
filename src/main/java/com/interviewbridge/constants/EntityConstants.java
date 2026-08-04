@@ -72,9 +72,21 @@ public class EntityConstants {
 
         public static final String COL_TECHNOLOGY_ID = "technology_id";
         public static final String COL_EXPERIENCE_ID = "experience_id";
+        public static final String COL_PREFERRED_JOB_ROLE = "preferred_job_role";
+        public static final String COL_PREFERRED_LOCATION = "preferred_location";
+        public static final String COL_PREFERRED_WORK_MODE = "preferred_work_mode";
+        public static final String COL_EXPECTED_SALARY = "expected_salary";
+        public static final String COL_JOB_ALERT_ENABLED = "job_alert_enabled";
 
         public static final String MSG_TECH_ID_REQUIRED = "Technology ID is required";
         public static final String MSG_EXP_ID_REQUIRED = "Experience ID is required";
+        
+        public static final int JOB_ROLE_MAX_LENGTH = 100;
+        public static final int LOCATION_MAX_LENGTH = 100;
+        
+        public static final String MSG_JOB_ROLE_SIZE = "Preferred job role must not exceed 100 characters";
+        public static final String MSG_LOCATION_SIZE = "Preferred location must not exceed 100 characters";
+        public static final String MSG_EXPECTED_SALARY_POSITIVE = "Expected salary must be zero or positive";
     }
 
     /**
@@ -174,5 +186,6 @@ public class EntityConstants {
         public static final String COL_EVALUATED_AT = "evaluated_at";
         public static final int MIN_SCORE = 0;
         public static final int MAX_SCORE = 10;
+        
     }
 }

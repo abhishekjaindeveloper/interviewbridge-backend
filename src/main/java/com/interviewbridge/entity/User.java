@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.interviewbridge.enums.ApprovalStatus;
 import com.interviewbridge.enums.Role;
+import com.interviewbridge.enums.WorkMode;
 import com.interviewbridge.common.BaseEntity;
 import com.interviewbridge.constants.EntityConstants;
 
@@ -23,7 +24,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -99,6 +102,26 @@ public class User extends BaseEntity {
 	@ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
 	@JoinColumn(name = EntityConstants.User.COL_EXPERIENCE_ID)
 	private ExperienceMaster experience;
+
+	@Size(max = EntityConstants.User.JOB_ROLE_MAX_LENGTH, message = EntityConstants.User.MSG_JOB_ROLE_SIZE)
+	@Column(name = EntityConstants.User.COL_PREFERRED_JOB_ROLE, length = EntityConstants.User.JOB_ROLE_MAX_LENGTH)
+	private String preferredJobRole;
+
+	@Size(max = EntityConstants.User.LOCATION_MAX_LENGTH, message = EntityConstants.User.MSG_LOCATION_SIZE)
+	@Column(name = EntityConstants.User.COL_PREFERRED_LOCATION, length = EntityConstants.User.LOCATION_MAX_LENGTH)
+	private String preferredLocation;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = EntityConstants.User.COL_PREFERRED_WORK_MODE, length = 20)
+	private WorkMode preferredWorkMode;
+
+	@PositiveOrZero(message = EntityConstants.User.MSG_EXPECTED_SALARY_POSITIVE)
+	@Column(name = EntityConstants.User.COL_EXPECTED_SALARY)
+	private Double expectedSalary;
+
+	@Builder.Default
+	@Column(name = EntityConstants.User.COL_JOB_ALERT_ENABLED)
+	private Boolean jobAlertEnabled = false;
 
 	@Column(name = EntityConstants.User.COL_REJECTION_REASON, length = EntityConstants.User.REJECTION_REASON_MAX_LENGTH)
 	private String rejectionReason;
