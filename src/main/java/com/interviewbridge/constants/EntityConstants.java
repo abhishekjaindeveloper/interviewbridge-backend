@@ -188,4 +188,49 @@ public class EntityConstants {
         public static final int MAX_SCORE = 10;
         
     }
+
+    /**
+     * Job entity constants.
+     */
+    public static final class Job {
+        public static final String TABLE_NAME = "ib_job";
+        public static final String COL_ID = "id";
+        public static final String COL_PROVIDER = "provider";
+        public static final String COL_EXTERNAL_JOB_ID = "external_job_id";
+        public static final String COL_COMPANY = "company";
+        public static final String COL_TITLE = "title";
+        public static final String COL_DESCRIPTION = "description";
+        public static final String COL_LOCATION = "location";
+        public static final String COL_SALARY_MIN = "salary_min";
+        public static final String COL_SALARY_MAX = "salary_max";
+        public static final String COL_EMPLOYMENT_TYPE = "employment_type";
+        public static final String COL_WORK_MODE = "work_mode";
+        public static final String COL_APPLY_URL = "apply_url";
+        public static final String COL_COMPANY_LOGO = "company_logo";
+        public static final String COL_TAGS = "tags";
+        public static final String COL_POSTED_AT = "posted_at";
+        public static final String COL_FETCHED_AT = "fetched_at";
+        public static final String COL_STATUS = "status";
+
+        public static final String IDX_PROVIDER = "idx_ib_job_provider";
+        public static final String IDX_EXTERNAL_JOB_ID = "idx_ib_job_external_id";
+
+        // Field Length Limits
+        public static final int PROVIDER_MAX_LENGTH = 50;
+        public static final int EXTERNAL_JOB_ID_MAX_LENGTH = 100;
+        public static final int COMPANY_MAX_LENGTH = 100;
+        public static final int TITLE_MAX_LENGTH = 255;
+        public static final int LOCATION_MAX_LENGTH = 100;
+        public static final int EMPLOYMENT_TYPE_MAX_LENGTH = 50;
+        public static final int WORK_MODE_MAX_LENGTH = 20;
+        public static final int APPLY_URL_MAX_LENGTH = 500;
+        public static final int COMPANY_LOGO_MAX_LENGTH = 500;
+        public static final int TAGS_MAX_LENGTH = 255;
+        public static final int STATUS_MAX_LENGTH = 20;
+
+        // Validation Error Messages
+        public static final String MSG_PROVIDER_BLANK = "Provider cannot be blank";
+        public static final String MSG_COMPANY_BLANK = "Company cannot be blank";
+        public static final String MSG_TITLE_BLANK = "Title cannot be blank";
+    }
 }
