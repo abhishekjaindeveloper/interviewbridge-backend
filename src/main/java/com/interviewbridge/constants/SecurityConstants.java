@@ -185,4 +185,16 @@ public final class SecurityConstants {
     public static final String EMAIL_PATTERN = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
     public static final String MSG_PHONE_EXISTS = "User with this phone number already exists: ";
     public static final String MSG_PHONE_ALREADY_REGISTERED = "Phone number already registered.";
+
+    // CareerPilot Endpoint Paths
+    public static final String ADMIN_JOB_SYNC_URL = "/api/admin/jobs/sync";
+    public static final String USER_JOBS_BASE_URL = "/api/user/jobs";
+    public static final String USER_MATCHED_JOBS_URL = "/api/user/jobs/matched";
+    public static final String USER_JOB_DETAILS_URL = "/api/user/jobs/{id}";
+
+    // CareerPilot Messages
+    public static final String MSG_JOB_SYNC_SUCCESS = "Job synchronization completed successfully.";
+    public static final String MSG_MATCHED_JOBS_SUCCESS = "Matched jobs retrieved successfully.";
+    public static final String MSG_JOB_DETAILS_SUCCESS = "Job details retrieved successfully.";
+    public static final String MSG_JOB_NOT_FOUND = "Job not found with id: ";
 }

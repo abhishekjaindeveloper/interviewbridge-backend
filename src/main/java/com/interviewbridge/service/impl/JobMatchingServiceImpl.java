@@ -1,5 +1,6 @@
 package com.interviewbridge.service.impl;
 
+import com.interviewbridge.constants.SecurityConstants;
 import com.interviewbridge.dto.response.MatchedJobResponse;
 import com.interviewbridge.entity.Job;
 import com.interviewbridge.entity.User;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,28 @@ public class JobMatchingServiceImpl implements JobMatchingService {
         return matchedJobs.stream()
             .sorted((j1, j2) -> Integer.compare(j2.matchScore(), j1.matchScore()))
             .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MatchedJobResponse getJobByIdForUser(UUID id, String userEmail) {
+        Job job = jobRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(SecurityConstants.MSG_JOB_NOT_FOUND + id));
+
+        if (!Boolean.TRUE.equals(job.getIsActive()) || !"ACTIVE".equalsIgnoreCase(job.getStatus())) {
+            throw new ResourceNotFoundException(SecurityConstants.MSG_JOB_NOT_FOUND + id);
+        }
+
+        int score = 0;
+        if (userEmail != null && !userEmail.trim().isEmpty()) {
+            String normalizedEmail = userEmail.trim().toLowerCase();
+            Optional<User> userOpt = userRepository.findByEmail(normalizedEmail);
+            if (userOpt.isPresent()) {
+                score = calculateScore(userOpt.get(), job);
+            }
+        }
+
+        return mapToMatchedJobResponse(job, score);
     }
 
     private int calculateScore(User user, Job job) {
