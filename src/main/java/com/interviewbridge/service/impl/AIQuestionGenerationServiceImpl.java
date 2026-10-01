@@ -4,6 +4,7 @@ import com.interviewbridge.constants.EntityConstants;
 import com.interviewbridge.dto.request.AIQuestionRequest;
 import com.interviewbridge.dto.response.AIQuestionResponse;
 import com.interviewbridge.service.AIQuestionGenerationService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  * Service implementation generating mock structured questions customized by technology and experience level.
  */
 @Service
+@Profile("mock")
 public class AIQuestionGenerationServiceImpl implements AIQuestionGenerationService {
 
     @Override

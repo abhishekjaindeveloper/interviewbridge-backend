@@ -166,6 +166,18 @@ public final class SecurityConstants {
     public static final String MSG_QUESTIONS_GENERATED_CREATED_ONLY = "Questions can only be generated for sessions in CREATED status.";
     public static final String MSG_AI_EVALUATION_FAILED = "AI evaluation service processing failed: ";
 
+    // Gemini AI Configuration & Error Messages
+    public static final String GEMINI_API_KEY_PROP = "${gemini.api-key:}";
+    public static final String GEMINI_MODEL_PROP = "${gemini.model:gemini-3.5-flash-lite}";
+    public static final String GEMINI_TIMEOUT_PROP = "${gemini.timeout-seconds:60}";
+    public static final String MSG_AI_API_KEY_MISSING = "Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.";
+    public static final String MSG_AI_SERVICE_COMMUNICATION_FAILED = "Failed to communicate with AI question generation service. Please try again later.";
+    public static final String MSG_AI_MALFORMED_RESPONSE = "AI service returned a malformed or unparseable response.";
+    public static final String MSG_AI_INVALID_QUESTION_COUNT = "AI service returned an invalid question count: requested %d, received %d.";
+    public static final String MSG_AI_DUPLICATE_QUESTIONS = "AI service returned duplicate questions. Please try again.";
+    public static final String MSG_AI_EMPTY_QUESTION_TEXT = "AI service returned an empty question text. Please try again.";
+    public static final String MSG_AI_NON_SEQUENTIAL_NUMBERS = "AI service returned non-sequential question numbers. Please try again.";
+
     // JWT Secret Validation Messages
     public static final String MSG_JWT_SECRET_REQUIRED = "JWT secret key must not be null or empty.";
     public static final String MSG_JWT_SECRET_INSUFFICIENT_LENGTH = "JWT secret key must be at least 256 bits (32 bytes) long when decoded from Base64 for HS256 algorithm.";
