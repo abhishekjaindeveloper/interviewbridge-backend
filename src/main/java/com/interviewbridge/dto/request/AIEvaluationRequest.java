@@ -7,5 +7,6 @@ public record AIEvaluationRequest(
     String question,
     String userAnswer,
     String technology,
-    String experience
+    String experience,
+    String referenceAnswer
 ) {}

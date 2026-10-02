@@ -50,22 +50,25 @@ class GeminiQuestionGenerationServiceImplTest {
     }
 
     @Test
-    @DisplayName("A. Unit Test: valid AI response is correctly parsed and converted to AIQuestionResponse list")
+    @DisplayName("A. Unit Test: valid AI response is correctly parsed and converted to AIQuestionResponse list with reference answers")
     void generateQuestions_validResponse_success() {
         String validJsonResponse = """
             {
               "questions": [
                 {
                   "questionNumber": 1,
-                  "questionText": "Explain the difference between HashMap and ConcurrentHashMap in Java."
+                  "questionText": "Explain the difference between HashMap and ConcurrentHashMap in Java.",
+                  "referenceAnswer": "HashMap is non-thread-safe and permits null keys/values. ConcurrentHashMap is thread-safe using lock striping or CAS on table buckets without locking the entire map."
                 },
                 {
                   "questionNumber": 2,
-                  "questionText": "How does the Java Garbage Collector identify memory leaks?"
+                  "questionText": "How does the Java Garbage Collector identify memory leaks?",
+                  "referenceAnswer": "The GC cannot collect objects that are still reachable via the GC roots. Memory leaks occur when unused objects remain strongly reachable through collections, caches, or unclosed resources."
                 },
                 {
                   "questionNumber": 3,
-                  "questionText": "Describe the fork-join framework in Java concurrency."
+                  "questionText": "Describe the fork-join framework in Java concurrency.",
+                  "referenceAnswer": "The ForkJoinPool uses a work-stealing algorithm to execute divide-and-conquer tasks represented by ForkJoinTask subclasses (RecursiveTask and RecursiveAction)."
                 }
               ]
             }
@@ -79,12 +82,18 @@ class GeminiQuestionGenerationServiceImplTest {
 
         assertNotNull(result);
         assertEquals(3, result.size());
+
         assertEquals(1, result.get(0).questionNumber());
         assertEquals("Explain the difference between HashMap and ConcurrentHashMap in Java.", result.get(0).questionText());
+        assertEquals("HashMap is non-thread-safe and permits null keys/values. ConcurrentHashMap is thread-safe using lock striping or CAS on table buckets without locking the entire map.", result.get(0).referenceAnswer());
+
         assertEquals(2, result.get(1).questionNumber());
         assertEquals("How does the Java Garbage Collector identify memory leaks?", result.get(1).questionText());
+        assertEquals("The GC cannot collect objects that are still reachable via the GC roots. Memory leaks occur when unused objects remain strongly reachable through collections, caches, or unclosed resources.", result.get(1).referenceAnswer());
+
         assertEquals(3, result.get(2).questionNumber());
         assertEquals("Describe the fork-join framework in Java concurrency.", result.get(2).questionText());
+        assertEquals("The ForkJoinPool uses a work-stealing algorithm to execute divide-and-conquer tasks represented by ForkJoinTask subclasses (RecursiveTask and RecursiveAction).", result.get(2).referenceAnswer());
     }
 
     @Test
@@ -96,11 +105,13 @@ class GeminiQuestionGenerationServiceImplTest {
               "questions": [
                 {
                   "questionNumber": 1,
-                  "questionText": "What is dependency injection?"
+                  "questionText": "What is dependency injection?",
+                  "referenceAnswer": "Dependency injection is a pattern where an object receives its dependencies from an external source."
                 },
                 {
                   "questionNumber": 2,
-                  "questionText": "How does Spring Boot auto-configuration work?"
+                  "questionText": "How does Spring Boot auto-configuration work?",
+                  "referenceAnswer": "Auto-configuration attempts to automatically configure beans based on jar dependencies added to classpath."
                 }
               ]
             }
@@ -123,11 +134,13 @@ class GeminiQuestionGenerationServiceImplTest {
               "questions": [
                 {
                   "questionNumber": 1,
-                  "questionText": "What is an index in PostgreSQL?"
+                  "questionText": "What is an index in PostgreSQL?",
+                  "referenceAnswer": "An index accelerates search queries on indexed columns."
                 },
                 {
                   "questionNumber": 2,
-                  "questionText": "what is an index in postgresql?"
+                  "questionText": "what is an index in postgresql?",
+                  "referenceAnswer": "A B-tree structure providing logarithmic search access."
                 }
               ]
             }
@@ -150,11 +163,13 @@ class GeminiQuestionGenerationServiceImplTest {
               "questions": [
                 {
                   "questionNumber": 1,
-                  "questionText": "   "
+                  "questionText": "   ",
+                  "referenceAnswer": "Some reference answer"
                 },
                 {
                   "questionNumber": 2,
-                  "questionText": "Valid question text"
+                  "questionText": "Valid question text",
+                  "referenceAnswer": "Another reference answer"
                 }
               ]
             }
@@ -170,6 +185,63 @@ class GeminiQuestionGenerationServiceImplTest {
     }
 
     @Test
+    @DisplayName("E. Validation Test: missing or blank referenceAnswer throws InvalidOperationException")
+    void generateQuestions_blankReferenceAnswer_throwsException() {
+        String blankReferenceAnswerJsonResponse = """
+            {
+              "questions": [
+                {
+                  "questionNumber": 1,
+                  "questionText": "Explain goroutines in Go.",
+                  "referenceAnswer": "   "
+                },
+                {
+                  "questionNumber": 2,
+                  "questionText": "What is a channel in Go?",
+                  "referenceAnswer": "Channels are typed conduits through which you can send and receive values."
+                }
+              ]
+            }
+            """;
+
+        when(geminiClientWrapper.generateContent(eq("gemini-3.5-flash-lite"), any(), any(GenerateContentConfig.class)))
+            .thenReturn(blankReferenceAnswerJsonResponse);
+
+        AIQuestionRequest request = new AIQuestionRequest("Go", "Junior", 2);
+        InvalidOperationException ex = assertThrows(InvalidOperationException.class, () -> service.generateQuestions(request));
+
+        assertEquals(SecurityConstants.MSG_AI_EMPTY_REFERENCE_ANSWER, ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("F. Validation Test: null referenceAnswer throws InvalidOperationException")
+    void generateQuestions_nullReferenceAnswer_throwsException() {
+        String nullReferenceAnswerJsonResponse = """
+            {
+              "questions": [
+                {
+                  "questionNumber": 1,
+                  "questionText": "Explain goroutines in Go."
+                },
+                {
+                  "questionNumber": 2,
+                  "questionText": "What is a channel in Go?",
+                  "referenceAnswer": "Channels are typed conduits through which you can send and receive values."
+                }
+              ]
+            }
+            """;
+
+        when(geminiClientWrapper.generateContent(eq("gemini-3.5-flash-lite"), any(), any(GenerateContentConfig.class)))
+            .thenReturn(nullReferenceAnswerJsonResponse);
+
+        AIQuestionRequest request = new AIQuestionRequest("Go", "Junior", 2);
+        InvalidOperationException ex = assertThrows(InvalidOperationException.class, () -> service.generateQuestions(request));
+
+        assertEquals(SecurityConstants.MSG_AI_EMPTY_REFERENCE_ANSWER, ex.getMessage());
+    }
+
+    @Test
     @DisplayName("Validation Test: non-sequential question numbers throws InvalidOperationException")
     void generateQuestions_nonSequentialNumbers_throwsException() {
         String outOfOrderJsonResponse = """
@@ -177,11 +249,13 @@ class GeminiQuestionGenerationServiceImplTest {
               "questions": [
                 {
                   "questionNumber": 1,
-                  "questionText": "Question one"
+                  "questionText": "Question one",
+                  "referenceAnswer": "Answer one"
                 },
                 {
                   "questionNumber": 3,
-                  "questionText": "Question three"
+                  "questionText": "Question three",
+                  "referenceAnswer": "Answer three"
                 }
               ]
             }
@@ -197,7 +271,7 @@ class GeminiQuestionGenerationServiceImplTest {
     }
 
     @Test
-    @DisplayName("E. Error Handling Test: Gemini failure throws clean application-level exception")
+    @DisplayName("Error Handling Test: Gemini failure throws clean application-level exception")
     void generateQuestions_geminiApiFailure_throwsApplicationException() {
         when(geminiClientWrapper.generateContent(eq("gemini-3.5-flash-lite"), any(), any(GenerateContentConfig.class)))
             .thenThrow(new InvalidOperationException(SecurityConstants.MSG_AI_SERVICE_COMMUNICATION_FAILED));

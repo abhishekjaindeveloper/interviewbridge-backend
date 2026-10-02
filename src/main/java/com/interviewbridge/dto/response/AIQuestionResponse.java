@@ -5,5 +5,6 @@ package com.interviewbridge.dto.response;
  */
 public record AIQuestionResponse(
     int questionNumber,
-    String questionText
+    String questionText,
+    String referenceAnswer
 ) {}

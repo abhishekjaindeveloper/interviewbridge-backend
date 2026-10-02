@@ -96,16 +96,16 @@ class PracticeQuestionServiceImplTest {
             .thenReturn(Collections.emptyList());
 
         List<AIQuestionResponse> mockAiResponses = List.of(
-            new AIQuestionResponse(1, "What is the Java memory model?"),
-            new AIQuestionResponse(2, "How do you avoid deadlock in multi-threaded Java?")
+            new AIQuestionResponse(1, "What is the Java memory model?", "The JMM specifies how the Java virtual machine works with the memory of the computer..."),
+            new AIQuestionResponse(2, "How do you avoid deadlock in multi-threaded Java?", "To avoid deadlock, acquire locks in a consistent order, use tryLock with timeouts...")
         );
 
         when(aiQuestionGenerationService.generateQuestions(any(AIQuestionRequest.class)))
             .thenReturn(mockAiResponses);
 
         List<PracticeQuestion> mockSaved = List.of(
-            PracticeQuestion.builder().id(UUID.randomUUID()).practiceSession(testSession).questionNumber(1).question("What is the Java memory model?").build(),
-            PracticeQuestion.builder().id(UUID.randomUUID()).practiceSession(testSession).questionNumber(2).question("How do you avoid deadlock in multi-threaded Java?").build()
+            PracticeQuestion.builder().id(UUID.randomUUID()).practiceSession(testSession).questionNumber(1).question("What is the Java memory model?").referenceAnswer("The JMM specifies how the Java virtual machine works with the memory of the computer...").build(),
+            PracticeQuestion.builder().id(UUID.randomUUID()).practiceSession(testSession).questionNumber(2).question("How do you avoid deadlock in multi-threaded Java?").referenceAnswer("To avoid deadlock, acquire locks in a consistent order, use tryLock with timeouts...").build()
         );
         when(practiceQuestionRepository.saveAll(anyList())).thenReturn(mockSaved);
 
@@ -113,6 +113,8 @@ class PracticeQuestionServiceImplTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
+        assertEquals("The JMM specifies how the Java virtual machine works with the memory of the computer...", result.get(0).referenceAnswer());
+        assertEquals("To avoid deadlock, acquire locks in a consistent order, use tryLock with timeouts...", result.get(1).referenceAnswer());
         assertEquals(SessionStatus.IN_PROGRESS, testSession.getSessionStatus());
         verify(practiceSessionRepository).save(testSession);
         verify(practiceQuestionRepository).saveAll(anyList());

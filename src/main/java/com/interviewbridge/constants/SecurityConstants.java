@@ -165,6 +165,12 @@ public final class SecurityConstants {
     // Remediation business validation messages
     public static final String MSG_QUESTIONS_GENERATED_CREATED_ONLY = "Questions can only be generated for sessions in CREATED status.";
     public static final String MSG_AI_EVALUATION_FAILED = "AI evaluation service processing failed: ";
+    public static final String MSG_AI_EMPTY_WHAT_WAS_CORRECT = "AI evaluation returned empty whatWasCorrect feedback.";
+    public static final String MSG_AI_EMPTY_WHAT_WAS_MISSING = "AI evaluation returned empty whatWasMissing feedback.";
+    public static final String MSG_AI_EMPTY_IMPROVED_ANSWER = "AI evaluation returned an empty improved answer.";
+    public static final String MSG_AI_EMPTY_EXPLANATION = "AI evaluation returned an empty explanation.";
+    public static final String MSG_AI_EMPTY_TRANSLATED_ANSWER = "AI evaluation returned an empty translated answer.";
+    public static final String MSG_AI_EVALUATION_COMMUNICATION_FAILED = "Failed to communicate with AI evaluation service. Please try again later.";
 
     // Gemini AI Configuration & Error Messages
     public static final String GEMINI_API_KEY_PROP = "${gemini.api-key:}";
@@ -176,6 +182,7 @@ public final class SecurityConstants {
     public static final String MSG_AI_INVALID_QUESTION_COUNT = "AI service returned an invalid question count: requested %d, received %d.";
     public static final String MSG_AI_DUPLICATE_QUESTIONS = "AI service returned duplicate questions. Please try again.";
     public static final String MSG_AI_EMPTY_QUESTION_TEXT = "AI service returned an empty question text. Please try again.";
+    public static final String MSG_AI_EMPTY_REFERENCE_ANSWER = "AI service returned an empty reference answer. Please try again.";
     public static final String MSG_AI_NON_SEQUENTIAL_NUMBERS = "AI service returned non-sequential question numbers. Please try again.";
 
     // JWT Secret Validation Messages

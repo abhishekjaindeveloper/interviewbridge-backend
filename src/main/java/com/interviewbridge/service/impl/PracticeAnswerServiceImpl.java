@@ -1,6 +1,6 @@
 package com.interviewbridge.service.impl;
 
-//import com.interviewbridge.enums.EvaluationStatus;
+import com.interviewbridge.enums.EvaluationStatus;
 import com.interviewbridge.enums.QuestionStatus;
 import com.interviewbridge.enums.Role;
 import com.interviewbridge.enums.SessionStatus;
@@ -56,39 +56,65 @@ public class PracticeAnswerServiceImpl implements PracticeAnswerService {
             throw new UnauthorizedException(SecurityConstants.MSG_SESSION_ACCESS_DENIED);
         }
 
-        if (session.getSessionStatus() != SessionStatus.IN_PROGRESS) {
+        if (session.getSessionStatus() != SessionStatus.IN_PROGRESS && session.getSessionStatus() != SessionStatus.COMPLETED) {
             throw new InvalidOperationException(SecurityConstants.MSG_SESSION_NOT_IN_PROGRESS);
         }
 
-        if (question.getQuestionStatus() == QuestionStatus.ANSWERED) {
+        if (question.getEvaluationStatus() == EvaluationStatus.COMPLETED) {
             throw new InvalidOperationException(SecurityConstants.MSG_QUESTION_ALREADY_ANSWERED);
         }
+
+        boolean isResubmission = question.getQuestionStatus() == QuestionStatus.ANSWERED;
 
         // Save userAnswer and update status
         question.setUserAnswer(request.answer());
         question.setQuestionStatus(QuestionStatus.ANSWERED);
-        practiceQuestionRepository.save(question);
 
-        // Retrieve all questions for the session to update completion status accurately
-        List<PracticeQuestion> questions = practiceQuestionRepository.findByPracticeSessionIdOrderByQuestionNumberAsc(session.getId());
-
-        int completedCount = 0;
-        for (PracticeQuestion q : questions) {
-            if (q.getId().equals(questionId)) {
-                completedCount++;
-            } else if (q.getQuestionStatus() == QuestionStatus.ANSWERED) {
-                completedCount++;
+        if (isResubmission) {
+            // Invalidate/reset stale evaluation data if evaluationStatus is FAILED or partially present
+            if (question.getEvaluationStatus() == EvaluationStatus.FAILED
+                    || question.getScore() != null
+                    || question.getEvaluatedAt() != null
+                    || question.getExplanation() != null
+                    || question.getTranslatedAnswer() != null
+                    || question.getImprovedAnswer() != null
+                    || question.getWhatWasCorrect() != null
+                    || question.getWhatWasMissing() != null) {
+                question.setEvaluationStatus(EvaluationStatus.PENDING);
+                question.setEvaluatedAt(null);
+                question.setScore(null);
+                question.setTranslatedAnswer(null);
+                question.setImprovedAnswer(null);
+                question.setExplanation(null);
+                question.setWhatWasCorrect(null);
+                question.setWhatWasMissing(null);
             }
         }
 
-        session.setCompletedQuestions(completedCount);
+        practiceQuestionRepository.save(question);
 
-        if (completedCount >= session.getTotalQuestions()) {
-            session.setSessionStatus(SessionStatus.COMPLETED);
-            session.setCompletedAt(LocalDateTime.now());
+        if (!isResubmission) {
+            // Retrieve all questions for the session to update completion status accurately
+            List<PracticeQuestion> questions = practiceQuestionRepository.findByPracticeSessionIdOrderByQuestionNumberAsc(session.getId());
+
+            int completedCount = 0;
+            for (PracticeQuestion q : questions) {
+                if (q.getId().equals(questionId)) {
+                    completedCount++;
+                } else if (q.getQuestionStatus() == QuestionStatus.ANSWERED) {
+                    completedCount++;
+                }
+            }
+
+            session.setCompletedQuestions(completedCount);
+
+            if (completedCount >= session.getTotalQuestions()) {
+                session.setSessionStatus(SessionStatus.COMPLETED);
+                session.setCompletedAt(LocalDateTime.now());
+            }
+
+            practiceSessionRepository.save(session);
         }
-
-        practiceSessionRepository.save(session);
 
         return new SubmitAnswerResponse(
             question.getId(),
@@ -131,6 +157,7 @@ public class PracticeAnswerServiceImpl implements PracticeAnswerService {
             question.getPracticeSession().getId(),
             question.getQuestionNumber(),
             question.getQuestion(),
+            question.getReferenceAnswer(),
             question.getUserAnswer(),
             question.getTranslatedAnswer(),
             question.getImprovedAnswer(),

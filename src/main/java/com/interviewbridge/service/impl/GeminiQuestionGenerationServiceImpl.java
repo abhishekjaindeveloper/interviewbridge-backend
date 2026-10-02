@@ -81,22 +81,26 @@ public class GeminiQuestionGenerationServiceImpl implements AIQuestionGeneration
     private String buildPrompt(String technology, String experienceLevel, int questionCount) {
         return String.format(
             "You are an expert technical interviewer conducting an interview for InterviewBridge.\n" +
-            "Generate exactly %d realistic interview questions for a candidate specializing in \"%s\" at the \"%s\" experience level.\n\n" +
+            "Generate exactly %d realistic interview questions along with high-quality reference answers for a candidate specializing in \"%s\" at the \"%s\" experience level.\n\n" +
             "Guidelines:\n" +
             "1. Relevance & Depth: Questions must be technically precise and specifically tailored to \"%s\". Do not produce generic filler.\n" +
-            "2. Experience Calibration: The questions must accurately match the \"%s\" seniority level.\n" +
+            "2. Experience Calibration: Both the questions and reference answers must accurately match the \"%s\" seniority level.\n" +
             "   - Junior: Focus on fundamentals, core syntax, OOP, standard libraries, and basic problem solving.\n" +
             "   - Mid-Level: Focus on framework internals, architecture, practical design decisions, error handling, and performance.\n" +
             "   - Senior/Lead: Focus on deep runtime internals, concurrency, distributed patterns, scalability, production debugging, and system trade-offs.\n" +
             "3. Multi-Area Coverage: Cover a diverse range of technical areas (e.g., core language, data structures, frameworks, concurrency, architecture, testing, and troubleshooting).\n" +
             "4. Question Mixture: Balance conceptual understanding, practical application, and real-world scenario/problem-solving questions.\n" +
             "5. Uniqueness: Each question must be completely distinct. Do not duplicate topics or phrasing within the set.\n" +
-            "6. Strict Output Rules:\n" +
-            "   - Provide ONLY the questions.\n" +
-            "   - Do NOT include answers, solutions, or explanations.\n" +
-            "   - Do NOT include markdown styling or bullet points.\n" +
-            "   - Do NOT include question number prefixes in the questionText (e.g., write 'What is...' instead of '1. What is...').\n" +
-            "   - Return exactly %d questions numbered sequentially from 1 to %d in the structured format.",
+            "6. Reference Answer Quality:\n" +
+            "   - Provide a clear, technically accurate, interview-oriented reference answer for each question.\n" +
+            "   - Explain the essential concepts, mechanisms, and best practices expected from a strong candidate.\n" +
+            "   - Ensure the reference answer is educational and useful for a candidate who does not know the answer.\n" +
+            "   - Keep it concise and focused without being excessively long.\n" +
+            "7. Strict Output Rules:\n" +
+            "   - Return ONLY the structured JSON response.\n" +
+            "   - Do NOT include markdown code block wrappers (e.g. ```json ... ```).\n" +
+            "   - Do NOT include question number prefixes in questionText (e.g., write 'What is...' instead of '1. What is...').\n" +
+            "   - Return exactly %d questions numbered sequentially from 1 to %d in the structured format with questionNumber, questionText, and referenceAnswer.",
             questionCount, technology, experienceLevel,
             technology,
             experienceLevel,
@@ -115,9 +119,13 @@ public class GeminiQuestionGenerationServiceImpl implements AIQuestionGeneration
                 "questionText", Schema.builder()
                     .type(Type.Known.STRING)
                     .description("The interview question text without any number prefix")
+                    .build(),
+                "referenceAnswer", Schema.builder()
+                    .type(Type.Known.STRING)
+                    .description("A high-quality, technically accurate reference answer explaining key concepts expected from the candidate")
                     .build()
             ))
-            .required("questionNumber", "questionText")
+            .required("questionNumber", "questionText", "referenceAnswer")
             .build();
 
         Schema questionsSchema = Schema.builder()
@@ -126,7 +134,7 @@ public class GeminiQuestionGenerationServiceImpl implements AIQuestionGeneration
                 "questions", Schema.builder()
                     .type(Type.Known.ARRAY)
                     .items(questionItemSchema)
-                    .description("List of generated interview questions")
+                    .description("List of generated interview questions and reference answers")
                     .build()
             ))
             .required("questions")
@@ -188,7 +196,13 @@ public class GeminiQuestionGenerationServiceImpl implements AIQuestionGeneration
                 throw new InvalidOperationException(SecurityConstants.MSG_AI_DUPLICATE_QUESTIONS);
             }
 
-            responses.add(new AIQuestionResponse(expectedNumber, cleanText));
+            String refAnswer = item.referenceAnswer();
+            if (refAnswer == null || refAnswer.trim().isEmpty()) {
+                throw new InvalidOperationException(SecurityConstants.MSG_AI_EMPTY_REFERENCE_ANSWER);
+            }
+            String cleanRefAnswer = refAnswer.trim();
+
+            responses.add(new AIQuestionResponse(expectedNumber, cleanText, cleanRefAnswer));
         }
 
         return responses;

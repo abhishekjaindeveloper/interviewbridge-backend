@@ -17,6 +17,8 @@ public record EvaluationResultResponse(
     String improvedAnswer,
     String explanation,
     Integer score,
+    String whatWasCorrect,
+    String whatWasMissing,
     EvaluationStatus evaluationStatus,
     LocalDateTime evaluatedAt
 ) {}

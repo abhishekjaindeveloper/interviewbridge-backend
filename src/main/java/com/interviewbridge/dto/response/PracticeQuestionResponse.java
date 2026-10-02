@@ -14,6 +14,7 @@ public record PracticeQuestionResponse(
     UUID practiceSessionId,
     Integer questionNumber,
     String question,
+    String referenceAnswer,
     String userAnswer,
     String translatedAnswer,
     String improvedAnswer,

@@ -61,6 +61,9 @@ public class PracticeQuestion extends BaseEntity {
     @Column(name = EntityConstants.PracticeQuestion.COL_QUESTION, nullable = false, columnDefinition = "TEXT")
     private String question;
 
+    @Column(name = EntityConstants.PracticeQuestion.COL_REFERENCE_ANSWER, columnDefinition = "TEXT")
+    private String referenceAnswer;
+
     @Column(name = EntityConstants.PracticeQuestion.COL_USER_ANSWER, columnDefinition = "TEXT")
     private String userAnswer;
 
@@ -75,6 +78,12 @@ public class PracticeQuestion extends BaseEntity {
 
     @Column(name = EntityConstants.PracticeQuestion.COL_SCORE)
     private Integer score;
+
+    @Column(name = EntityConstants.PracticeQuestion.COL_WHAT_WAS_CORRECT, columnDefinition = "TEXT")
+    private String whatWasCorrect;
+
+    @Column(name = EntityConstants.PracticeQuestion.COL_WHAT_WAS_MISSING, columnDefinition = "TEXT")
+    private String whatWasMissing;
 
     @NotNull
     @Enumerated(EnumType.STRING)

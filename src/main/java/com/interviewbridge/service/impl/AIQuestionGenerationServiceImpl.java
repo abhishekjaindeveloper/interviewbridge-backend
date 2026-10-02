@@ -98,7 +98,8 @@ public class AIQuestionGenerationServiceImpl implements AIQuestionGenerationServ
                     case 10: default: questionText = String.format("What are the major new features introduced in recent versions of %s, and how should a %s developer leverage them?", tech, exp); break;
                 }
             }
-            questions.add(new AIQuestionResponse(i, questionText));
+            String mockReferenceAnswer = String.format("A comprehensive reference answer explaining key concepts of %s for question %d at %s level.", tech, i, exp);
+            questions.add(new AIQuestionResponse(i, questionText, mockReferenceAnswer));
         }
 
         return questions;

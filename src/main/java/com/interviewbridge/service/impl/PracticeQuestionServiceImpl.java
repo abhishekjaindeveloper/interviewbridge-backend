@@ -78,6 +78,7 @@ public class PracticeQuestionServiceImpl implements PracticeQuestionService {
                 .practiceSession(session)
                 .questionNumber(aiResp.questionNumber())
                 .question(aiResp.questionText())
+                .referenceAnswer(aiResp.referenceAnswer())
                 .questionStatus(QuestionStatus.PENDING)
                 .isActive(true)
                 .build())
@@ -148,6 +149,7 @@ public class PracticeQuestionServiceImpl implements PracticeQuestionService {
             question.getPracticeSession().getId(),
             question.getQuestionNumber(),
             question.getQuestion(),
+            question.getReferenceAnswer(),
             question.getUserAnswer(),
             question.getTranslatedAnswer(),
             question.getImprovedAnswer(),

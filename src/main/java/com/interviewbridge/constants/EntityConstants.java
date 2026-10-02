@@ -167,11 +167,14 @@ public class EntityConstants {
         public static final String COL_SESSION_ID = "practice_session_id";
         public static final String COL_QUESTION_NUMBER = "question_number";
         public static final String COL_QUESTION = "question";
+        public static final String COL_REFERENCE_ANSWER = "reference_answer";
         public static final String COL_USER_ANSWER = "user_answer";
         public static final String COL_TRANSLATED_ANSWER = "translated_answer";
         public static final String COL_IMPROVED_ANSWER = "improved_answer";
         public static final String COL_EXPLANATION = "explanation";
         public static final String COL_SCORE = "score";
+        public static final String COL_WHAT_WAS_CORRECT = "what_was_correct";
+        public static final String COL_WHAT_WAS_MISSING = "what_was_missing";
         public static final String COL_QUESTION_STATUS = "question_status";
 
         public static final String IDX_QUESTION_SESSION_ID = "idx_ib_practice_question_session_id";

@@ -13,6 +13,7 @@ public record GeminiQuestionsPayload(
      */
     public record GeminiQuestionItem(
         Integer questionNumber,
-        String questionText
+        String questionText,
+        String referenceAnswer
     ) {}
 }

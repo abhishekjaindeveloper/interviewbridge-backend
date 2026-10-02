@@ -7,5 +7,7 @@ public record AIEvaluationResponse(
     String translatedAnswer,
     String improvedAnswer,
     String explanation,
-    Integer score
+    Integer score,
+    String whatWasCorrect,
+    String whatWasMissing
 ) {}

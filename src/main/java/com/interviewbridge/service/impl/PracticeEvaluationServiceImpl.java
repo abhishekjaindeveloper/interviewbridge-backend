@@ -70,7 +70,8 @@ public class PracticeEvaluationServiceImpl implements PracticeEvaluationService 
             question.getQuestion(),
             question.getUserAnswer(),
             session.getTechnology().getTechnologyName(),
-            session.getExperience().getExperienceLabel()
+            session.getExperience().getExperienceLabel(),
+            question.getReferenceAnswer()
         );
 
         AIEvaluationResponse aiResponse;
@@ -95,6 +96,8 @@ public class PracticeEvaluationServiceImpl implements PracticeEvaluationService 
         question.setImprovedAnswer(aiResponse.improvedAnswer());
         question.setExplanation(aiResponse.explanation());
         question.setScore(aiResponse.score());
+        question.setWhatWasCorrect(aiResponse.whatWasCorrect());
+        question.setWhatWasMissing(aiResponse.whatWasMissing());
         question.setEvaluationStatus(EvaluationStatus.COMPLETED);
         question.setEvaluatedAt(LocalDateTime.now());
         practiceQuestionRepository.save(question);
@@ -159,6 +162,8 @@ public class PracticeEvaluationServiceImpl implements PracticeEvaluationService 
             question.getImprovedAnswer(),
             question.getExplanation(),
             question.getScore(),
+            question.getWhatWasCorrect(),
+            question.getWhatWasMissing(),
             question.getEvaluationStatus(),
             question.getEvaluatedAt()
         );
